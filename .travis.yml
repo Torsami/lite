@@ -1,13 +1,8 @@
-language: node_js  
-node_js:  
-  - "node"
-
-before_script:  
-  - cd ./nodejs
-
-script:  
+language: node_js
+node_js:
+  - "6"
+before_script:
   - npm install
-  - npm run postinstall
-
-after_script:  
-  - npm run test
+script:
+  - node app.js &
+  - npm test
