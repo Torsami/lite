@@ -1,13 +1,11 @@
+import User from './user';
 
 const signUp = (req, res, next) => {
-    const user = new User ({
-        username: req.body.username,
-        email: req.body.email
-    });
+    const user = new User (req.body.username, req.body.email);
 
     user
         .check()
-        .then(userReport => {
+        .then(userProfile => {
             res.status(403).json({
                 message: 'User already exist'
             });

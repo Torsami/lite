@@ -1,5 +1,11 @@
+import pg from 'pg';
+export class User{
 
-class user{
+    constructor(email, username, password){
+        this.email = email;
+        this.username = username;
+        this.hash = password;
+        }
 
     check(){
         pg.connect(connect, (err, client, done) => {
@@ -8,7 +14,7 @@ class user{
                     error: err
                 });
             }
-            client.query('SELECT email, password FROM database WHERE email = $1', [email], function (err, userReport){
+            client.query('SELECT * FROM database WHERE email = $1', [this.email], (err, userProfile) => {
                 if (err) {
                     return res.status(500).json({
                         error: err
@@ -32,4 +38,4 @@ class user{
         };
 }
 
-export {user};
+// User;

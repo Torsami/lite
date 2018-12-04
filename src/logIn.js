@@ -1,19 +1,16 @@
+import {User} from './user';
 
 const logIn = (req, res, next) => {
-    const user = new User ({
-        email: req.body.email,
-        pass: req.body.password
-    });
-
+    const user = new User (req.body.email, req.body.password);
     user
         .check()
-        .then(userReport => {
-            if(!userReport){
+        .then(userProfile => {
+            if(!userProfile){
                 return res.status(404).json({
                     message: 'Invalid email or password'
                 });
             }else{
-                bcrypt.compare(password, userReport[0].password, (err, result) => {
+                bcrypt.compare(password, userProfile[0].password, (err, result) => {
                     if(err){
                         return res.status(404).json({
                             message: 'Invalid email or password'
@@ -21,8 +18,8 @@ const logIn = (req, res, next) => {
                     }
                     if(result){
                         const token = jwt.sign({
-                            email: userReport[0].email,
-                            username: userReport[0].username
+                            email: userProfile[0].email,
+                            username: userProfile[0].username
                         }, 
                         secret,
                         {
