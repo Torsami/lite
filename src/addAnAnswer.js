@@ -18,7 +18,8 @@ const addAnAnswer = (req, res) => {
             question.answers.push(newAnswer);
             
             return res.status(201).send({
-            status: 'New Answer added successfully', 
+            success: 'true',
+            message: 'New Answer added successfully', 
             answers: question.answers
             })
         }

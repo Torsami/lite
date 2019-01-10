@@ -8,7 +8,7 @@ const addAQuestion = (req, res) => {
             message: 'question is required'
         }); 
      } 
-     
+
   const newQuestion = {
       id: db.length + 1,
       question: req.body.questions,
@@ -18,7 +18,8 @@ const addAQuestion = (req, res) => {
     db.push(newQuestion);
 
     return res.status(201).send({
-        status: 'New question added successfully', 
+        success: 'true',
+        message: 'New question added successfully', 
         question: newQuestion
     })
 }

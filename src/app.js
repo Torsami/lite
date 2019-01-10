@@ -7,21 +7,63 @@ import signUp from './signUp';
 import logIn from './logIn';
 //import {voteDown, voteUp} from './votes';
 import db from './db/db';
-import User from './user';
+import verifyToken from './user';
 import bodyParser from 'body-parser';
 import path from 'path';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import pg from 'pg';
 
+
 const app = express();
-const connect = "postgres://postlite:password101@localhost/postgres";
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.text());                                    
 app.use(bodyParser.json({ type: 'application/json'}));  
 app.use(express.static("public"));
+
+
+//postgres://YourUserName:YourPassword@localhost:5432/YourDatabase
+//const connect = "samipostgres://samipostgres:samipostgres@localhost:/mydatabase";
+/*
+app.get('/api/v1/questions', (req, res)=>{
+
+  pool.query("DELETE FROM users WHERE username='Clicksammore'", (err, result)=>{
+    console.log(err, result);
+    pool.end();
+  });
+ 
+  pool.query('SELECT * FROM users', (err, result)=>{
+      console.log(result);
+    });
+/*
+pool.query("INSERT INTO users( email, username, password, signupdate) VALUES( 'vida@gmail.com', 'vida', 'password101', NOW())", (err, res)=>{
+console.log(err, res)
+  pool.end();
+});
+
+/*
+  //pg connect
+
+pool.connect( (err, client, done)=>{
+  if(err){
+    return console.error('error fetching client from pool', err);
+  }
+  
+  pool.query('SELECT * FROM users', (err, result)=>{
+    if(result){
+      console.log(result);
+    }
+    done();
+    if(err){
+      return console.error('error running query', err);
+    }
+  });
+});
+
+});
+*/
 
 
 app.get('/', (req, res)=>{
@@ -29,13 +71,14 @@ app.get('/', (req, res)=>{
 })
 app.get('/api/v1/questions', getAllQuestions);
 app.get('/api/v1/questions/:questionId', getAQuestion);
-app.post('/api/v1/questions/', addAQuestion);
+app.post('/api/v1/questions/', verifyToken, addAQuestion);
 app.post('/api/v1/questions/:questionId/answers', addAnAnswer);
 app.post('/api/v1/auth/signUp', signUp);
 app.post('/api/v1/auth/logIn', logIn);
 //app.post('/api/v1/votedown/:questionId/answerId', voteDown);
 //app.post('/api/v1/voteup/:questionId/answerId', voteUp);
 //app.post('/api/v1/choosenanswer/:questionId/answerId', choosenAnswer);
+
 
 const PORT = 5000;
 

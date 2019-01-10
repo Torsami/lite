@@ -1,41 +1,72 @@
 import pg from 'pg';
-export class User{
+import express from 'express';
+import bodyParser from 'body-parser';
+import jwt from 'jsonwebtoken';
 
-    constructor(email, username, password){
-        this.email = email;
-        this.username = username;
-        this.hash = password;
-        }
+const app = express();
 
-    check(){
-        pg.connect(connect, (err, client, done) => {
-            if(err){
-                return res.status(500).json({
-                    error: err
-                });
-            }
-            client.query('SELECT * FROM database WHERE email = $1', [this.email], (err, userProfile) => {
-                if (err) {
-                    return res.status(500).json({
-                        error: err
-                    });
-                }
-                done()
-            })
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.text());                                    
+app.use(bodyParser.json({ type: 'application/json'})); 
+
+const pool = new pg.Pool({
+    user: 'samipostgres',
+    host: '127.0.0.1',
+    database: 'mydatabase',
+    password: 'samipostgres',
+    port: '5432'});
+
+
+const verifyToken = (req, res, next)=>{
+
+    const token = req.headers.authorization.split(" ")[1];
+
+    try{
+        const decoded = jwt.verify(token, 'secret');
+        req.userData = decoded;
+        next();
+    }catch(error){
+        res.status(401).send({
+            success: `false`,
+            message: `Auth failed`
         })
     }
 
-    save(){
-        pg.connect(connect, (err, client, done) => {
-            if(err){
-                console.log(err);
-                return 'error connecting to database';
-            }
-            client.query('INSERT INTO database (email, username, password) VALUES($1, $2, $3)', 
-                        [this.email, this.username, this.hash]);
-                done();
-            });
-        };
 }
 
-// User;
+/*
+const checkUser = (email) => {
+    
+   
+    pool.query('SELECT * FROM users WHERE email = $1', [email.email], (err, res) => {
+        
+        if (err) {
+            throw err;
+        }
+
+        console.log(res.rows[0]);
+       return res.rows[0];
+  
+})
+
+
+let saveUser = (email, username, hash) => {
+       
+    pool.query('INSERT INTO users (email, username, password) VALUES($1, $2, $3)', 
+        [email, username, hash], (err, res) => {
+            if (err) {
+                return err.status(500).json({
+                    error: err
+                });
+            }
+            return res.status(201).send({
+                success: `true`,
+                message: `New user saved successfully`
+            });
+                });
+};
+*/
+
+
+export default verifyToken;
