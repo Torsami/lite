@@ -69,4 +69,4 @@ let saveUser = (email, username, hash) => {
 */
 
 
-export default verifyToken;
+export default {pool, verifyToken};

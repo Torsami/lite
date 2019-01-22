@@ -6,13 +6,11 @@ import addAnAnswer from './addAnAnswer';
 import signUp from './signUp';
 import logIn from './logIn';
 //import {voteDown, voteUp} from './votes';
-import db from './db/db';
-import verifyToken from './user';
 import bodyParser from 'body-parser';
 import path from 'path';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import pg from 'pg';
+import user from './user';
+
+const verifyToken = user.verifyToken;
 
 
 const app = express();
@@ -70,9 +68,9 @@ app.get('/', (req, res)=>{
   res.sendFile(path.resolve('./public/index.html'));
 })
 app.get('/api/v1/questions', getAllQuestions);
-app.get('/api/v1/questions/:questionId', getAQuestion);
+app.get('/api/v1/questions/:questionId', verifyToken, getAQuestion);
 app.post('/api/v1/questions/', verifyToken, addAQuestion);
-app.post('/api/v1/questions/:questionId/answers', addAnAnswer);
+app.post('/api/v1/questions/:questionId/answers', verifyToken, addAnAnswer);
 app.post('/api/v1/auth/signUp', signUp);
 app.post('/api/v1/auth/logIn', logIn);
 //app.post('/api/v1/votedown/:questionId/answerId', voteDown);

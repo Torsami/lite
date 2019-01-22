@@ -14,7 +14,7 @@
 	</script>
 
 	<link rel="StyleSheet" href="lite.css" type="text/css">
-	<link rel="shortcut icon" href="images/logo.png" type="image/png">
+	
 	<title>Lite |StackOverFlow Lite</title>
 </head>
 
@@ -63,22 +63,19 @@
 
 		<div id="interactions">
                    
-                   <div id="signUp" class="member-form">
+                   <div id="member" class="member-form">
                         <div>
                             <span>Sign up</span>
                             <p>Already have an account? 
                                 <a class="link" href="login.html">Log in here</a>
                             </p>
-                        </div>
-                         <form action="" method="">
-                             <p><input type="text" name="username" placeholder="Create Username" required pattern="[a-z]{4,8}"/></p>
-                             <p><input type="email" name="email" placeholder="Enter your email" required /></p>
-                             <p><input type="password" name="password" placeholder="Create a password" required/></p>
-                             <p><input type="password" name="verify" placeholder="Verify your password" required /></p>
-                             <p><button >Sign up</button></p>
-                             
-                         </form>
-                     </div>
+						</div>
+							<p><input type="text" name="username" id="username" placeholder="Create Username" required pattern="[a-z]{4,8}"/></p>
+							<p><input type="email" name="email" id="email" placeholder="Enter your email" required /></p>
+							<p><input type="password" name="password" id="password" placeholder="Create a password" required/></p>
+							<p><input type="password" name="verify" id="verify" placeholder="Verify your password" required /></p>
+							<p><button onclick='signUp()'>Sign up</button></p>
+				   </div>
 		</div>
 		
 

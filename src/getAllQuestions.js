@@ -1,11 +1,24 @@
 import db from './db/db';
+import user from './user';
+
+const pool = user.pool;
 
 const getAllQuestions = (req, res) => {
-  res.status(200).send({
-  success: 'true',
-  message: 'All Questions retrieved successfully',
-  entireQuestionDb: db
-  });
+
+  pool.query('SELECT * FROM questions', (err, result)=>{
+
+    if(result){
+      const entireQuestionDb = result.rows;
+
+      res.status(200).send({
+        success: `true`,
+        message: `All Questions retrieved successfully`,
+        entireQuestionDb: entireQuestionDb
+        });
+    }
+    
+  })
+  
 };
 
 export default getAllQuestions;

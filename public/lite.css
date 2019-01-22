@@ -1,4 +1,24 @@
 /* Divides */
+.true{
+margin: 2px 2px;
+margin-bottom: 5px;
+padding: 5px 2px;
+border: solid 2px green;
+background: lightgreen;
+font-size: 15px;
+border-radius: 8px;
+}
+
+.false{
+  margin: 2px 2px;
+  margin-bottom: 5px;
+  padding: 5px 2px;
+  border: solid 2px red;
+  background: orange;
+  font-size: 15px;
+  border-radius: 8px;
+  }
+
 .categories{
 font-family: cursive;
 width: 15%;
@@ -68,7 +88,11 @@ font-size: 13px;
 .link{
   text-decoration: underline;
   color:blue;
+  border: none;
+  cursor:pointer;
 }
+
+
 body {
   max-width: 100%;
   margin: 0;

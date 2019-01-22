@@ -3,6 +3,9 @@ import bcrypt from 'bcrypt';
 import express from 'express';
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
+import user from './user';
+
+const pool = user.pool;
 
 const app = express();
 
@@ -11,12 +14,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.text());                                    
 app.use(bodyParser.json({ type: 'application/json'})); 
 
-const pool = new pg.Pool({
-    user: 'samipostgres',
-    host: '127.0.0.1',
-    database: 'mydatabase',
-    password: 'samipostgres',
-    port: '5432'});
 
 const logIn = (req, res, next) => {
 
