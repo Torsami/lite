@@ -13,7 +13,8 @@ const getAllQuestions = (req, res) => {
       res.status(200).send({
         success: `true`,
         message: `All Questions retrieved successfully`,
-        entireQuestionDb: entireQuestionDb
+        entireQuestionDb: entireQuestionDb,
+        userData: req.cookies.username
         });
     }
     

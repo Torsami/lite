@@ -8,9 +8,11 @@
 	<meta name="keywords" content="Stackover flow, lite, learning, web development, debugging, question answer">
 	<meta name="author" content="Samson Samuel">
 
-	<script src="js/lite.js" type="text/javascript">
+	<script src="./js/lite.js" type="text/javascript">
 	</script>
-	<script src="js/hotQuestions.js" type="text/javascript">
+	<script src="./js/signUp.js" type="text/javascript">
+	</script>
+	<script src="./js/logIn.js" type="text/javascript">
 	</script>
 	
 	<link rel="StyleSheet" href="lite.css" type="text/css">
@@ -27,8 +29,8 @@
 				</a>
 			</div>
 			<div class="right-pane">
-				<button onclick='location.href="login.html";' class="button">Log in</button>
-				<button onclick='location.href="login.html";' class="button">Sign up</button>
+				<button onclick="memberForm('signup')" class="button">Log in</button>
+				<button onclick="memberForm('login')" class="button">Sign up</button>
 
 			</div>
 		
@@ -65,96 +67,20 @@
 				</div>
 		</div>
 
-		<div class="right-div" id="hotQuestions">
-			<div>
-				<strong>Hot Questions <img src="images/question.png" /></strong>
-			</div>
-			
-			<ul>
-					<li>
-							<a href="#">
-							Python 3 Reading Relative Lines in a text document and convert to Pandas DF (Part II)
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							Read a bytes column in spark
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							Do I need the DB driver JAR when using JNDI from the server?
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							how do you increment a variable in an insert by picking the last id from another table at each row?
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							Require files only when running some specs
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							angular 5 - add class only if element exists in array
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							Generic pattern for a loop- pintool
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							give a background color to the pointer of popover bootstrap
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							Design the minimum possible BNF Grammar
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							What is the connection settings from outside for a mongoDB running in amazon EC2
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							UIPageControl has unspecified grey background colour
-							</a>
-							</li>
-							<li>
-							<a href="#">
-								What if i modify my class then load an old pickle?
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							converting pd dataframe to np array with date as index
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							my NativeScript app dosent display the google maps
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							How to export flink task or Back Pressure related metrics to prometheus?
-							</a>
-							</li>
-							<li>
-							<a href="#">
-							How to fetch the number from a json file?
-							</a>
-							</li>
-
-
-			</ul>
-
+		<div class="right-div" >
+			<div class="member-form" id="member">
+				<div id="info">
+				</div>
+				<div>
+				<span>Log in</span>
+				<p>Don't have an account? 
+					<button class="link" onclick="memberForm('login')">Sign up here</button>
+				</p>
+				</div>
+						<p><input type="email" name="email" id="email" placeholder="Enter your email" required /></p>
+						<p><input type="password" name="password" id="password" placeholder="Create a password" required/></p>
+						<p><button onclick=logIn()>Log in</button></p>
+				</div>
 		</div>
 
 		<div id="interactions">

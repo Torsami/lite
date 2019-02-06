@@ -21,7 +21,41 @@ const pool = new pg.Pool({
 const signUp = (req, res) => {
 
 
-const {email, username, password, verify} = req.body;
+let {email, username, password, verify} = req.body;
+let mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+username = username.replace(/[^0-9A-Za-z\,]/g, "").toLowerCase();
+
+if(username === ''){
+    return res.status(400).send({
+        success: `false`,
+        message: `All fields are required`,
+        field: `username`
+    })
+}
+
+if(!email.match(mailformat)){
+    return res.status(400).send({
+        success: `false`,
+        message: `Enter a valid email`,
+        field: `email`
+    })
+}
+
+if(password === ''){
+    return res.status(400).send({
+        success: `false`,
+        message: `All fields are required`,
+        field: `password`
+    })
+}
+
+if(verify === ''){
+    return res.status(400).send({
+        success: `false`,
+        message: `All fields are required`,
+        field: `verify`
+    })
+}
 
 pool.query('SELECT * FROM users WHERE (email = $1 OR username = $2)', [email, username], (err, result) => {
     
@@ -31,14 +65,16 @@ pool.query('SELECT * FROM users WHERE (email = $1 OR username = $2)', [email, us
         if(db.username === username){
             return res.status(400).send({
                 success: `false`,
-                message: `Username already taken by another user`
+                message: `Username already taken by another user`,
+                field: `username`
             })
         }
   
         if(db.email === email){
             return res.status(400).send({
                 success: 'false',     
-                message: 'Email is associated with another user'
+                message: 'Email is associated with another user',
+                field: `email`
             }); 
         }
 
@@ -46,25 +82,23 @@ pool.query('SELECT * FROM users WHERE (email = $1 OR username = $2)', [email, us
         if(password !== verify){
             return res.status(400).send({
                 success: 'false',     
-                message: 'Password does not match'
+                message: 'Password does not match',
+                field: `verify`
             }); 
         }
-        
-        console.log(password, verify);
 
 
         bcrypt.hash(password, 10, (err, hash) => {
             if(err) {
                 
-                console.log(err)
                 return {
                    success: `false`,
                    message: err
                 };
             }else{
-                pool.query('INSERT INTO users (email, username, password, signupdate) VALUES($1, $2, $3, $4)', 
-                [email, username, hash, new Date()], (err, result) => {
-                    
+                pool.query('INSERT INTO users (email, username, password, signupdate, answers) VALUES($1, $2, $3, $4, $5)', 
+                [email, username, hash, new Date(), 0], (err, result) => {
+                   
                         if(result){
 
                             return res.status(201).send({

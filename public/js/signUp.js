@@ -29,7 +29,7 @@ fetch(req)
         if(data.success === 'true'){
             const info = `
             <div id="info">
-            <p class="true">${data.message}</p>
+            <p class="true" >${data.message}</p>
             </div>
             `;
 
@@ -40,16 +40,17 @@ fetch(req)
                 <button class="link" onclick=memberForm('login')>Sign up here</button>
             </p>
             </div>
-                <p><input type="text" name="username" placeholder="Enter Username" required pattern="[a-z]{4,8}"/></p>
-                <p><input type="password" name="password" placeholder="Enter a password" required/></p>
-                <p><button >Log in</button></p>
+            <p><input type="email" name="email" id="email" placeholder="Enter your email" required /></p>
+            <p><input type="password" name="password" id="password" placeholder="Create a password" required/></p>
+            <p><button onclick=logIn()>Log in</button></p>
             `;
 
             const registered = info + loginform;
            
 document.getElementById('member').innerHTML = registered;
         }else{
-document.getElementById('info').innerHTML = `<p class="false">${data.message}</p>`;
+document.getElementById('info').innerHTML = `<p class="false" id="status">${data.message}</p>`;
+document.getElementById(data.field).focus();
         }
      
     });

@@ -1,12 +1,10 @@
-import db from './db/db';
 import user from './user';
 
 const pool = user.pool;
 
 
 const addAnAnswer = (req, res) => {
-    pool.query('SELECT username FROM users WHERE email=$1', [req.userData.email], (err, result)=>{
-    const username = result.rows[0].username;
+ 
 
     const id = parseInt(req.params.questionId, 10);
 
@@ -16,11 +14,12 @@ const addAnAnswer = (req, res) => {
         if(result){
             const newAnswer = {
                 id: answersArray.length + 1,
-                user: username,
+                user: req.body.username,
                 answer: req.body.answer,
                 upVotes: [],
                 downVotes:[],
-                reply: []
+                reply: [],
+                time: new Date()
               };
 
               answersArray.push(newAnswer);
@@ -43,7 +42,6 @@ const addAnAnswer = (req, res) => {
         }
 
        
-    })
     })
     
 }

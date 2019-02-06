@@ -10,6 +10,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.text());                                    
 app.use(bodyParser.json({ type: 'application/json'})); 
 
+const secret = 'secret';
+
 const pool = new pg.Pool({
     user: 'samipostgres',
     host: '127.0.0.1',
@@ -23,10 +25,13 @@ const verifyToken = (req, res, next)=>{
     const token = req.headers.authorization.split(" ")[1];
 
     try{
-        const decoded = jwt.verify(token, 'secret');
+        const decoded = jwt.verify(token, secret);
         req.userData = decoded;
         next();
     }catch(error){
+        res.cookie("userData", '');
+        res.cookie("token", '');
+        
         res.status(401).send({
             success: `false`,
             message: `Auth failed`
@@ -68,5 +73,4 @@ let saveUser = (email, username, hash) => {
 };
 */
 
-
-export default {pool, verifyToken};
+export default {pool, verifyToken, secret};
