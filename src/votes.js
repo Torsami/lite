@@ -12,24 +12,32 @@ const voteDown = (req, res) => {
     pool.query('SELECT answers FROM questions WHERE id=$1', [id], (err, result)=>{
     if(result){
         let theAnswer = JSON.parse(result.rows[0].answers[answer]);
+        let success, message, ansTotVotes, opposition, count = 0;
 
-        let opposition;
         let checker = theAnswer.upVotes.indexOf(req.body.username);
         if(checker > -1){
             theAnswer.upVotes.splice(checker, 1);
             opposition =  theAnswer.upVotes.length;
+            count = count - 1
+
           }
 
         checker = theAnswer.downVotes.indexOf(req.body.username);
+
         if(checker === -1){
             theAnswer.downVotes.push(req.body.username);
+
+            success = `true`;
+            message = `Vote casted successfully`; 
+            ansTotVotes = theAnswer.downVotes.length;
+            count = count + 1;
+
         }else{
-            res.status(201).send({
-                success: `false`,
-                message: `Casted vote reversed successfully`, 
-                opposition: opposition,
-                ansTotVotes: theAnswer.downVotes.length - 1
-            })
+            theAnswer.downVotes.splice(checker, 1);
+            success = `false`;
+            message = `Casted vote reversed successfully`; 
+            ansTotVotes = theAnswer.downVotes.length - 1;
+            count = count - 1;
         }
         
 
@@ -40,10 +48,11 @@ const voteDown = (req, res) => {
             
             if(resp){
                     res.status(201).send({
-                        success: `true`,
-                        message: `Vote casted successfully`, 
+                        success: success,
+                        message: message, 
                         opposition: opposition,
-                        ansTotVotes: theAnswer.downVotes.length
+                        ansTotVotes: theAnswer.downVotes.length,
+                        count: count
 
                     })
 
@@ -61,24 +70,29 @@ const voteUp = (req, res) => {
     pool.query('SELECT answers FROM questions WHERE id=$1', [id], (err, result)=>{
     if(result){
         let theAnswer = JSON.parse(result.rows[0].answers[answer]);
+        let success, message, ansTotVotes, opposition, count = 0;
 
-        let opposition;
         let checker = theAnswer.downVotes.indexOf(req.body.username);
         if(checker > -1){
             theAnswer.downVotes.splice(checker, 1);
             opposition =  theAnswer.downVotes.length;
+            count = count - 1
           }
 
         checker = theAnswer.upVotes.indexOf(req.body.username);
         if(checker === -1){
             theAnswer.upVotes.push(req.body.username);
+
+             success = `true`;
+             message = `Vote casted successfully`;
+             ansTotVotes = theAnswer.upVotes.length ;
+             count = count + 1;
         }else{
-            res.status(201).send({
-                success: `false`,
-                message: `Casted vote reversed successfully`, 
-                opposition: opposition,
-                ansTotVotes: theAnswer.upVotes.length - 1
-            })
+            theAnswer.upVotes.splice(checker, 1);
+             success = `false`;
+             message = `Casted vote reversed successfully`; 
+             ansTotVotes = theAnswer.upVotes.length - 1;
+             count = count - 1;
         }
         
 
@@ -89,10 +103,11 @@ const voteUp = (req, res) => {
             
             if(resp){
                     res.status(201).send({
-                        success: `true`,
-                        message: `Vote casted successfully`, 
+                        success: success,
+                        message: message, 
                         opposition: opposition,
-                        ansTotVotes: theAnswer.upVotes.length
+                        ansTotVotes: theAnswer.upVotes.length,
+                        count: count
 
 
                     })

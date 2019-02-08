@@ -16,7 +16,7 @@ let getCookie = (cname) => {
 
 const token = getCookie('token');
 const username = getCookie('username');
-const ansContributed = getCookie('answers');
+let ansContributed = getCookie('answers');
 
     let uri = 'http://localhost:5000/api/v1/questions';
     let h = new Headers({'content-type': 'application/json'});
@@ -38,7 +38,7 @@ const ansContributed = getCookie('answers');
 
                 let allQuestions = `<div>
                                         <h2>Overflowing Questions</h2>
-                                    </div>`;
+                                    </div><div id="overflowing">`;
                
                 data.entireQuestionDb.forEach(each => {
                     if(each.username === username){
@@ -54,13 +54,13 @@ const ansContributed = getCookie('answers');
                     allQuestions += `<div class="question" id="question${each.id}">
 					<div>
 						<div class="question-status">
-							<p id="answers${each.id}"><p>${each.answers.length}</br><a href="#"><img  class="icons" src="images/comment.png"/></a></p>
+							<p><strong id="answers${each.id}">${each.answers.length}</strong></br><a href="#"><img  class="icons" src="images/comment.png"/></a></p>
 						</div>
 						<div class="question-status">
-								<p id="votes${each.id}"><p>${totalVotes}</br><a href="#"><img  class="icons" src="images/votes.jpg"/></a></p>
+							<p><strong id="votes${each.id}">${totalVotes}</strong></br><a href="#"><img  class="icons" src="images/votes.jpg"/></a></p>
 						</div>
 						<div class="question-status">
-								<p id="views${each.id}"><p>100</br><a href="#"><img  class="icons" src="images/view.png"/></a></p>
+							<p><strong id="views${each.id}">${each.viewed}</strong></br><a href="#"><img  class="icons" src="images/view.png"/></a></p>
 						</div>
 					</div>
                     <div class="cursor" onClick="showAnswers(${each.id})">
@@ -77,10 +77,12 @@ const ansContributed = getCookie('answers');
                 </div>`;
                 }); 
 
+                allQuestions += `</div>` ;
                 document.getElementById('interactions').innerHTML = allQuestions;
     
                 const profile = `<p><h2>${username}<br/><img src="images/menu.png"/></h2></p>
-                <h2>Questions Asked: ${asked}!</br>Answers contributed: ${ansContributed}!</h2>`;
+                <h2>Questions Asked: <strong id="asked">${asked}</strong>!</br>
+                Answers contributed: <strong id="ansContributed">${ansContributed}!</h2>`;
     
                 document.getElementById('profile').innerHTML = profile;
             }  
@@ -105,7 +107,8 @@ let bearer = `Bearer ${token}`;
 let uri = 'http://localhost:5000/api/v1/questions';
 let h = new Headers({'content-type': 'application/json', 'authorization': bearer});
 let body = {
-    questions: postedQ
+    questions: postedQ,
+    username: username
 }
 
 let req = new Request(uri, {
@@ -122,13 +125,45 @@ fetch(req)
                 window.location.replace("index.html");
             }else{
                 document.getElementById('info').innerHTML = `<p class="true" >${data.message}</p>`;
+           
+                const el = document.getElementById('overflowing'),
+                elChild = document.createElement('div');
+                elChild.innerHTML = `<div class="question" id="question${data.id}">
+                <div>
+                    <div class="question-status">
+                        <p><strong id="answers${data.id}">0</strong></br><a href="#"><img  class="icons" src="images/comment.png"/></a></p>
+                    </div>
+                    <div class="question-status">
+                        <p><strong id="votes${data.id}">0</strong></br><a href="#"><img  class="icons" src="images/votes.jpg"/></a></p>
+                    </div>
+                    <div class="question-status">
+                            <p id="views${data.id}">0</br><a href="#"><img  class="icons" src="images/view.png"/></a></p>
+                    </div>
+                </div>
+                <div class="cursor" onClick="showAnswers(${data.id})">
+                    <strong>${username}</strong>
+                    <p id="q1">
+                        ----- ${postedQ} 
+                    </p>
+                    <p class="timing-details">
+                            1 minute ago
+                    </p>
+                </div>
+                <div id="answersDiv${data.id}">
+                </div>
+                </div>`;
+                
+                el.prepend(elChild);            
             }
            })
 
 
     }
-
+    document.getElementById('postQuestion').value = '';
+    document.getElementById('asked').innerHTML = Number(document.getElementById('asked').innerHTML)+1 ;
 }
+
+
 
 let showAnswers = (questionId) => {
     
@@ -146,7 +181,7 @@ let showAnswers = (questionId) => {
     fetch(req)
             .then((resp) => resp.json())
             .then((data) => {
-                let allAnswers = '<div class="ques-with-ans">';
+                let allAnswers = `<div class="ques-with-ans" ><div id="allAnswers${questionId}">`;
                 let ans;
                 let answersArray;
 
@@ -233,9 +268,11 @@ let showAnswers = (questionId) => {
                     
                 }
 
-                
+document.getElementById(`views${questionId}`).innerHTML = Number(document.getElementById(`views${questionId}`).innerHTML) + 1;
+
 
     document.getElementById(`answersDiv${questionId}`).innerHTML = `${allAnswers}
+    </div>
     <div class="justify">
     <div id="info${questionId}"></div>
         <p>
@@ -288,7 +325,40 @@ fetch(req)
                 window.location.replace("index.html");
             }else{
                 document.getElementById(`info${qId}`).innerHTML = `<p class="true" >${data.message}</p>`;
-            }
+let ansId = Number(document.getElementById(`answers${qId}`).innerHTML);
+document.getElementById(`answers${qId}`).innerHTML = ansId + 1 ;
+document.getElementById(`ansContributed`).innerHTML = data.ansContributed ;
+document.getElementById(`comment${qId}`).value = '';
+
+
+const el = document.getElementById(`allAnswers${qId}`),
+    elChild = document.createElement('div');
+
+elChild.innerHTML = `<div class="ans-for-ques">
+<div>
+<p>
+<strong>${username}</strong>
+</p>
+</div>
+<p id="answerId${ansId}">
+${newComment}
+</p>
+<div>
+
+<div class="answer-status">1 hour ago</div> 
+<div class="answer-status" id="down${qId,ansId}" onClick="voteDown(${qId}, ${ansId})">
+<img  class="icons" src="images/downvote.jpg"/></br>0
+</div>
+<div class="answer-status" id="up${qId,ansId}" onClick="voteUp(${qId}, ${ansId})">
+<img  class="icons" src="images/upvote.jpg"/></br>0
+</div>
+</p>
+</div>
+</div>`;
+
+el.appendChild(elChild);
+
+}
            })
     }
 }
@@ -315,22 +385,29 @@ let voteDown = (qId, aId) => {
     fetch(req)
             .then((resp) => resp.json())
             .then((data) => {
+                if(data.message === `Auth failed`){
+                    alert('Your login session has expired, you will need to login again')
+                    window.location.replace("index.html");
+                }
+
                 if(data.success === `true`){
-                    
             document.getElementById(`down${qId,aId}`).innerHTML = `
             <img  class="icons" src="images/downvoted.jpg"/></br>${data.ansTotVotes}`;
 
-if(typeof(data.opposition) !== 'undefined'){
-            document.getElementById(`up${qId,aId}`).innerHTML = `
-            <img  class="icons" src="images/upvote.jpg" /></br>${data.opposition}`;
-}
+            if(typeof(data.opposition) !== 'undefined'){
+                document.getElementById(`up${qId,aId}`).innerHTML = `
+                <img  class="icons" src="images/upvote.jpg" /></br>${data.opposition}`;
+                }
+
         }else{
             document.getElementById(`down${qId,aId}`).innerHTML = `
             <img  class="icons" src="images/downvote.jpg"/></br>${data.ansTotVotes}`;
         }
+   document.getElementById(`votes${qId}`).innerHTML = Number(document.getElementById(`votes${qId}`).innerHTML) + data.count;
+
     })
     
-    }
+}
 
 
 let voteUp = (qId, aId) => {
@@ -353,6 +430,11 @@ let voteUp = (qId, aId) => {
     fetch(req)
             .then((resp) => resp.json())
             .then((data) => {
+                if(data.message === `Auth failed`){
+                    alert('Your login session has expired, you will need to login again')
+                    window.location.replace("index.html");
+                }
+
                 if(data.success === `true`){
                     document.getElementById(`up${qId,aId}`).innerHTML = `
                     <img  class="icons" src="images/upvoted.jpg" /></br>${data.ansTotVotes}`;
@@ -362,9 +444,13 @@ let voteUp = (qId, aId) => {
                     <img  class="icons" src="images/downvote.jpg" /></br>${data.opposition}`;
                     }
 }else{
-    document.getElementById(`down${qId,aId}`).innerHTML = `
+    document.getElementById(`up${qId,aId}`).innerHTML = `
     <img  class="icons" src="images/upvote.jpg"/></br>${data.ansTotVotes}`;
+
 }
+
+document.getElementById(`votes${qId}`).innerHTML = Number(document.getElementById(`votes${qId}`).innerHTML) + data.count;
+
     })
-    
-    }
+
+}

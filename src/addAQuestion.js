@@ -16,22 +16,27 @@ const addAQuestion = (req, res) => {
 
 
     const newQuestion = {
-        username: req.cookies.userData.username,
+        username: req.body.username,
         question: req.body.questions,
         answers: [],
         time: new Date()
       }
   
-      pool.query("INSERT INTO questions (username, question, answers, time) VALUES($1, $2, $3, $4)",
-      [newQuestion.username, newQuestion.question, newQuestion.answers, newQuestion.time], (err, res)=>{ 
-    });
+      pool.query("INSERT INTO questions (username, question, answers, viewed, time) VALUES($1, $2, $3, $4, $5) RETURNING id",
+      [newQuestion.username, newQuestion.question, newQuestion.answers, 0, newQuestion.time], (err, resp)=>{ 
+        return res.status(201).send({
+            success: `true`,
+            message: `New question added successfully`, 
+            question: newQuestion,
+            id: resp.rows[0].id
+   
+            })
   
 
-      return res.status(201).send({
-          success: `true`,
-          message: `New question added successfully`, 
-          question: newQuestion
-      })
+
+
+
+      });
      
 
 }
