@@ -18,76 +18,7 @@ const token = getCookie('token');
 const username = getCookie('username');
 let ansContributed = getCookie('answers');
 
-    let uri = 'http://localhost:5000/api/v1/questions';
-    let h = new Headers({'content-type': 'application/json'});
-    
-    let req = new Request(uri, {
-        method: 'GET',
-        headers: h,
-    });
-
-    fetch(req)
-        .then((resp) => resp.json())
-        .then((data) => {
-           
-            if(typeof(data.userData) === 'undefined'){
-                window.location.replace("index.html");
-            }else{
-                        
-                let asked = 0;
-
-                let allQuestions = `<div>
-                                        <h2>Overflowing Questions</h2>
-                                    </div><div id="overflowing">`;
-               
-                data.entireQuestionDb.forEach(each => {
-                    if(each.username === username){
-                    asked ++;}
-
-                    let  totalVotes = 0;
-               
-                   each.answers.forEach(parseVote => {
-                    vote = JSON.parse(parseVote);
-                    totalVotes = totalVotes + vote.upVotes.length + vote.downVotes.length               
-                   })
-
-                    allQuestions += `<div class="question" id="question${each.id}">
-					<div>
-						<div class="question-status">
-							<p><strong id="answers${each.id}">${each.answers.length}</strong></br><a href="#"><img  class="icons" src="images/comment.png"/></a></p>
-						</div>
-						<div class="question-status">
-							<p><strong id="votes${each.id}">${totalVotes}</strong></br><a href="#"><img  class="icons" src="images/votes.jpg"/></a></p>
-						</div>
-						<div class="question-status">
-							<p><strong id="views${each.id}">${each.viewed}</strong></br><a href="#"><img  class="icons" src="images/view.png"/></a></p>
-						</div>
-					</div>
-                    <div class="cursor" onClick="showAnswers(${each.id})">
-                        <strong>${each.username}</strong>
-						<p id="q1">
-							----- ${each.question} 
-						</p>
-						<p class="timing-details">
-								1 minute ago
-						</p>
-                    </div>
-                    <div id="answersDiv${each.id}">
-                    </div>
-                </div>`;
-                }); 
-
-                allQuestions += `</div>` ;
-                document.getElementById('interactions').innerHTML = allQuestions;
-    
-                const profile = `<p><h2>${username}<br/><img src="images/menu.png"/></h2></p>
-                <h2>Questions Asked: <strong id="asked">${asked}</strong>!</br>
-                Answers contributed: <strong id="ansContributed">${ansContributed}!</h2>`;
-    
-                document.getElementById('profile').innerHTML = profile;
-            }  
-        })
-
+overFlowingQuestions();
 
 
 
@@ -137,7 +68,7 @@ fetch(req)
                         <p><strong id="votes${data.id}">0</strong></br><a href="#"><img  class="icons" src="images/votes.jpg"/></a></p>
                     </div>
                     <div class="question-status">
-                            <p id="views${data.id}">0</br><a href="#"><img  class="icons" src="images/view.png"/></a></p>
+                        <p><strong id="views${data.id}">0</strong></br><a href="#"><img  class="icons" src="images/view.png"/></a></p>
                     </div>
                 </div>
                 <div class="cursor" onClick="showAnswers(${data.id})">
@@ -146,7 +77,7 @@ fetch(req)
                         ----- ${postedQ} 
                     </p>
                     <p class="timing-details">
-                            1 minute ago
+                            Just now
                     </p>
                 </div>
                 <div id="answersDiv${data.id}">
@@ -209,7 +140,7 @@ let showAnswers = (questionId) => {
                         </p>
                         <div>
         
-                        <div class="answer-status">1 hour ago</div> 
+                        <div class="answer-status">${timeDifference(ans.time)}</div> 
                         <div class="answer-status" id="down${questionId,0}" onClick="voteDown(${questionId}, 0)">
                         <img  class="icons" src="images/${thumpsDown}"/></br>${ans.downVotes.length}
                         </div>
@@ -251,7 +182,7 @@ let showAnswers = (questionId) => {
                         </p>
                         <div>
         
-                        <div class="answer-status">1 hour ago</div> 
+                        <div class="answer-status">${timeDifference(ans.time)}</div> 
                         <div class="answer-status" id="down${questionId,i}" onClick="voteDown(${questionId}, ${i})">
                         <img  class="icons" src="images/${thumpsDown}"/></br>${ans.downVotes.length}
                         </div>
@@ -345,7 +276,7 @@ ${newComment}
 </p>
 <div>
 
-<div class="answer-status">1 hour ago</div> 
+<div class="answer-status">some few seconds ago</div> 
 <div class="answer-status" id="down${qId,ansId}" onClick="voteDown(${qId}, ${ansId})">
 <img  class="icons" src="images/downvote.jpg"/></br>0
 </div>
