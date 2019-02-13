@@ -1,3 +1,7 @@
+if(username !== ""){
+    window.location.replace("userpage.html");
+}
+
 const logIn = () => {
 
     let email = document.getElementById('email').value;

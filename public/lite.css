@@ -380,7 +380,7 @@ footer .left-pane div{
 
 #edit{
   float: right;
-   width: 65px;
+   width: 90px;
   font-size: 11px;
   padding: 1px 1px;
   color: #00008B;
@@ -484,7 +484,6 @@ opacity:0;
   
   wrapper {
     top: 17%;
-    display: block;
   }
   .member-box {
     display: block;
@@ -495,10 +494,18 @@ opacity:0;
     padding: 0 auto;
   
   }
-  .right-pane {
+  .right-div, .categories, #interactions, footer{
     float: left;
     width: 100%;
+    clear: both;
+    z-index: initial;
+    position: initial;
+    padding: 3% 1%;
+    margin: 3% 1%;
   }
+  
+
+  
   .high-light-bar-1 {
     overflow: none;
     padding: 1% 1%;
@@ -509,29 +516,5 @@ opacity:0;
     padding: 1% 1%;
     text-align: center;
   }
-  .main {
-    width: 100%;
-    float: none;
-    text-align: center;
-    padding: 0 auto;
-  }
 
-  #menu-list{
-	  display: none;
-  }
-  
-  #menu-list li,
-  nav,
-  .left-pane {
-    width: 100%;
-    padding: 5px 8px;
-    margin: 0 auto;
-  }
-  #main-menu{
-	  display: none;
-  }
-  
-  #menu-folded-icon{
-  display: block;}
-  
 }

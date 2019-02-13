@@ -89,3 +89,7 @@ const validateForm=()=> {
         return false;
     }
 }
+
+const logOut = () => {
+    
+}

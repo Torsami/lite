@@ -97,6 +97,8 @@ fetch(req)
 
 
 let showAnswers = (questionId) => {
+
+    if(username) 
     
     if(document.getElementById(`answersDiv${questionId}`).innerHTML.replace(/[^0-9A-Za-z\,]/g, "") === ''){
 
