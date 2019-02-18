@@ -13,6 +13,7 @@ const addAnAnswer = (req, res) => {
         let ansContributed = parseInt(ans.rows[0].answers) + 1;
         res.cookie("answers", ansContributed);
        
+       
         pool.query('UPDATE users SET answers = $1 WHERE username = $2', [ansContributed, req.body.username], (error, ansUpdated) => {
         })
 

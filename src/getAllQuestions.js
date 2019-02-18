@@ -1,9 +1,11 @@
 import db from './db/db';
 import user from './user';
 
+
 const pool = user.pool;
 
 const getAllQuestions = (req, res) => {
+
 
   pool.query('SELECT * FROM questions', (err, result)=>{
 

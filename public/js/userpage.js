@@ -15,7 +15,7 @@ let getCookie = (cname) => {
   }
 
 const token = getCookie('token');
-const username = getCookie('username');
+let username = getCookie('username');
 let ansContributed = getCookie('answers');
 
 overFlowingQuestions();
@@ -98,7 +98,20 @@ fetch(req)
 
 let showAnswers = (questionId) => {
 
-    if(username) 
+    if(username === ''){
+    commentSection = `<div>
+    <p class="important">You must be logged in to contribute, </br>either sign up or log in on the member area</p>
+    `}else{
+        commentSection = `
+        <p>
+        <textarea id="comment${questionId}" rows="10" cols="40" placeholder="Add comment to this thread..." required></textarea>
+        </p>
+        <p><button onClick="addComment(${questionId})">Add comment</button></p>
+        </form>
+    </div></div>`;
+    }
+    
+    
     
     if(document.getElementById(`answersDiv${questionId}`).innerHTML.replace(/[^0-9A-Za-z\,]/g, "") === ''){
 
@@ -114,10 +127,10 @@ let showAnswers = (questionId) => {
     fetch(req)
             .then((resp) => resp.json())
             .then((data) => {
+                
                 let allAnswers = `<div class="ques-with-ans" ><div id="allAnswers${questionId}">`;
                 let ans;
                 let answersArray;
-
                 if(data.questionData.answers.length === 1){
                     
                          ans = JSON.parse(data.questionData.answers);
@@ -129,7 +142,17 @@ let showAnswers = (questionId) => {
                          if(ans.downVotes.includes(username)){
                              thumpsDown = 'downvoted.jpg';
                          }
-    
+
+                         if(data.questionData.username === username){
+                         if(ans.choosen === 'choosen')
+                         {choosenText = '<p class="choosen">Choosen Answer</p>';}
+                         else{choosenText = '<p class="important">Choose this answer</p>';}
+                         }else{
+                             choosenText = '';
+                         }
+
+
+
                         allAnswers += `
                         <div class="ans-for-ques">
                         <div>
@@ -143,11 +166,14 @@ let showAnswers = (questionId) => {
                         <div>
         
                         <div class="answer-status">${timeDifference(ans.time)}</div> 
-                        <div class="answer-status" id="down${questionId,0}" onClick="voteDown(${questionId}, 0)">
+                        <div class="answer-status" id="down${questionId}${0}" onClick="voteDown(${questionId}, ${0})">
                         <img  class="icons" src="images/${thumpsDown}"/></br>${ans.downVotes.length}
                         </div>
-                        <div class="answer-status" id="up${questionId,0}" onClick="voteUp(${questionId}, 0)">
+                        <div class="answer-status" id="up${questionId}${0}" onClick="voteUp(${questionId}, ${0})">
                         <img  class="icons" src="images/${thumpsUp}"/></br>${ans.upVotes.length}
+                        </div>
+                        <div class="answer-status" id="choosen${questionId}${0}" onClick="choosen(${questionId}, ${0})">
+                        ${choosenText}
                         </div>
         
                         </p>
@@ -170,6 +196,13 @@ let showAnswers = (questionId) => {
                         if(ans.downVotes.includes(username)){
                             thumpsDown = 'downvoted.jpg';
                         }
+                        if(data.questionData.username === username){
+                            if(ans.choosen === 'choosen')
+                            {choosenText = '<p class="choosen">Choosen Answer</p>';}
+                            else{choosenText = '<p class="important">Choose this answer</p>';}
+                            }else{
+                                choosenText = '';
+                            }
 
 
                         allAnswers += `
@@ -185,11 +218,14 @@ let showAnswers = (questionId) => {
                         <div>
         
                         <div class="answer-status">${timeDifference(ans.time)}</div> 
-                        <div class="answer-status" id="down${questionId,i}" onClick="voteDown(${questionId}, ${i})">
+                        <div class="answer-status" id="down${questionId}${i}" onClick="voteDown(${questionId}, ${i})">
                         <img  class="icons" src="images/${thumpsDown}"/></br>${ans.downVotes.length}
                         </div>
-                        <div class="answer-status" id="up${questionId,i}" onClick="voteUp(${questionId}, ${i})">
+                        <div class="answer-status" id="up${questionId}${i}" onClick="voteUp(${questionId}, ${i})">
                         <img  class="icons" src="images/${thumpsUp}"/></br>${ans.upVotes.length}
+                        </div>
+                        <div class="answer-status" id="choosen${questionId}${i}" onClick="choosen(${questionId}, ${i})">
+                        ${choosenText}
                         </div>
         
                         </p>
@@ -208,12 +244,7 @@ document.getElementById(`views${questionId}`).innerHTML = Number(document.getEle
     </div>
     <div class="justify">
     <div id="info${questionId}"></div>
-        <p>
-        <textarea id="comment${questionId}" rows="10" cols="40" placeholder="Add comment to this thread..." required></textarea>
-        </p>
-        <button onClick="addComment(${questionId})">Add comment</button>
-        </form>
-    </div></div>
+    </br></br>${commentSection}
     `
             })
 
@@ -226,10 +257,12 @@ document.getElementById(`views${questionId}`).innerHTML = Number(document.getEle
 
 
 let addComment = (qId) => {
+  
+
     let newComment = document.getElementById(`comment${qId}`).value;
 
     if(newComment.replace(/[^0-9A-Za-z\,]/g, "") === ''){
-        document.getElementById(`info${qId}`).innerHTML = `<p class="false" id="status">Field can't be left empty</p>`;
+        document.getElementById(`info${qId}`).innerHTML = `<p class="false" id="status">Comment field can't be left empty</p>`;
         document.getElementById(`comment${qId}`).focus();
     }else{
 
@@ -279,14 +312,14 @@ ${newComment}
 <div>
 
 <div class="answer-status">some few seconds ago</div> 
-<div class="answer-status" id="down${qId,ansId}" onClick="voteDown(${qId}, ${ansId})">
+<div class="answer-status" id="down${qId}${ansId}" onClick="voteDown(${qId}, ${ansId})">
 <img  class="icons" src="images/downvote.jpg"/></br>0
 </div>
-<div class="answer-status" id="up${qId,ansId}" onClick="voteUp(${qId}, ${ansId})">
+<div class="answer-status" id="up${qId}${ansId}" onClick="voteUp(${qId}, ${ansId})">
 <img  class="icons" src="images/upvote.jpg"/></br>0
 </div>
-</p>
-</div>
+<div class="answer-status" id="choosen${qId}${ansId}" onClick="choosen(${qId}, ${ansId})">
+<p class="important">Choose this answer</p>
 </div>`;
 
 el.appendChild(elChild);
@@ -319,21 +352,21 @@ let voteDown = (qId, aId) => {
             .then((resp) => resp.json())
             .then((data) => {
                 if(data.message === `Auth failed`){
-                    alert('Your login session has expired, you will need to login again')
+                    alert('Inactive logging session, Kindly login or signup to cast your vote!');
                     window.location.replace("index.html");
                 }
 
                 if(data.success === `true`){
-            document.getElementById(`down${qId,aId}`).innerHTML = `
+            document.getElementById(`down${qId}${aId}`).innerHTML = `
             <img  class="icons" src="images/downvoted.jpg"/></br>${data.ansTotVotes}`;
 
             if(typeof(data.opposition) !== 'undefined'){
-                document.getElementById(`up${qId,aId}`).innerHTML = `
+                document.getElementById(`up${qId}${aId}`).innerHTML = `
                 <img  class="icons" src="images/upvote.jpg" /></br>${data.opposition}`;
                 }
 
         }else{
-            document.getElementById(`down${qId,aId}`).innerHTML = `
+            document.getElementById(`down${qId}${aId}`).innerHTML = `
             <img  class="icons" src="images/downvote.jpg"/></br>${data.ansTotVotes}`;
         }
    document.getElementById(`votes${qId}`).innerHTML = Number(document.getElementById(`votes${qId}`).innerHTML) + data.count;
@@ -364,20 +397,20 @@ let voteUp = (qId, aId) => {
             .then((resp) => resp.json())
             .then((data) => {
                 if(data.message === `Auth failed`){
-                    alert('Your login session has expired, you will need to login again')
+                    alert('Inactive logging session, Kindly login or signup to cast your vote!');
                     window.location.replace("index.html");
                 }
 
                 if(data.success === `true`){
-                    document.getElementById(`up${qId,aId}`).innerHTML = `
+                    document.getElementById(`up${qId}${aId}`).innerHTML = `
                     <img  class="icons" src="images/upvoted.jpg" /></br>${data.ansTotVotes}`;
 
                     if(typeof(data.opposition) !== 'undefined'){
-                    document.getElementById(`down${qId,aId}`).innerHTML = `
+                    document.getElementById(`down${qId}${aId}`).innerHTML = `
                     <img  class="icons" src="images/downvote.jpg" /></br>${data.opposition}`;
                     }
 }else{
-    document.getElementById(`up${qId,aId}`).innerHTML = `
+    document.getElementById(`up${qId}${aId}`).innerHTML = `
     <img  class="icons" src="images/upvote.jpg"/></br>${data.ansTotVotes}`;
 
 }

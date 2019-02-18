@@ -1,11 +1,13 @@
 import user from './user';
 
+
 const pool = user.pool;
 
 
 
 
 const voteDown = (req, res) => {
+
     const id = parseInt(req.params.questionId, 10);
     const answer = parseInt(req.params.answerId, 10);
 
@@ -64,6 +66,7 @@ const voteDown = (req, res) => {
 
 
 const voteUp = (req, res) => {
+
     const id = parseInt(req.params.questionId, 10);
     const answer = parseInt(req.params.answerId, 10);
 

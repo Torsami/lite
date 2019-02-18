@@ -63,7 +63,9 @@ let overFlowingQuestions = () => {
                 <h2>Questions Asked: <strong id="asked">${asked}</strong>!</br>
                 Answers contributed: <strong id="ansContributed">${ansContributed}!</h2>`;
     
-                document.getElementById('profile').innerHTML = profile;
+                if(profDiv = document.getElementById('profile')){
+                    profDiv.innerHTML = profile;
+                }
 
                 const over = document.getElementById("over"),
                 mostans = document.getElementById("mostans"),
@@ -304,3 +306,6 @@ let timeDifference = (date1) => {
       }
   
   }
+
+
+  

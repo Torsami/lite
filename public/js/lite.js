@@ -7,6 +7,7 @@
 	menuBox.style.animation-direction: alternate;	
 }
 */
+let commentSection ;
 
 const signupform = `
 <div id="info">
