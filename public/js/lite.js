@@ -1,12 +1,4 @@
-/*const toggleMenu = (elementId)=> {
-    let menuBox = document.getElementById(elementId);    
-    
-	menuBox.style.animation-name: gal;
-	menuBox.style.animation-timing-function: ease-in-out;
-	menuBox.style.animation-duration: 30s;
-	menuBox.style.animation-direction: alternate;	
-}
-*/
+
 let commentSection ;
 
 const signupform = `
@@ -37,6 +29,7 @@ const loginform = `
 <p><input type="email" name="email" id="email" placeholder="Enter your email" required /></p>
 <p><input type="password" name="password" id="password" placeholder="Create a password" required/></p>
 <p><button onclick=logIn()>Log in</button></p>
+<p class="link">Forgot password? Click here</p>
 `;
 
 const memberForm = (status) => {
@@ -51,36 +44,6 @@ let form;
 
 document.getElementById('member').innerHTML = form;
 }
-
-
-
-/*
-
-  function swap (fade, show) {
-    let fade = document.getElementById(fade); 
-    let show = document.getElementById(show); 
-
-    fade.style.display = "none";
-    show.style.display = "block";
-
-}
-
-*/
-
-	
-	// if(menuBox.style.display == "block"
-	
-	
-	
-	
-	
-	// ) {
-      // menuBox.style.display = "none";
-    // }
-    // else { 
-      // menuBox.style.display = "block";
-    // }
-  // }
 
 
 const validateForm=()=> {

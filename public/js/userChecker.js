@@ -19,7 +19,7 @@ let choosen = (qId, aId) => {
         fetch(req)
                 .then((resp) => resp.json())
                 .then((data) => {
-                    console.log(data.true)
+                    
                     if(data.message === `Auth failed`){
                         alert('Inactive logging session, Kindly login or signup to cast your vote!');
                         window.location.replace("index.html");
