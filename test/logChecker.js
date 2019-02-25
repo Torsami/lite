@@ -1,6 +1,8 @@
+import fetch from 'isomorphic-fetch';
+
 let getCookie = (cname) => {
     let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
+    let decodedCookie = decodeURIComponent(req.cookie);
     let ca = decodedCookie.split(';');
     for(let i = 0; i <ca.length; i++) {
       let c = ca[i];
@@ -32,8 +34,11 @@ fetch(uri, {
     .then((data) => {
     
         if(data.success === 'true'){
-const token = getCookie('token');
+          console.log('surely')
         }
     })
+    
+const token = getCookie('token');
+
 
 export default {getCookie, token};
