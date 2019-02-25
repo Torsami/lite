@@ -1,5 +1,5 @@
 import pg from 'pg';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import express from 'express';
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
