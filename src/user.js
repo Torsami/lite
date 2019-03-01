@@ -40,37 +40,4 @@ const verifyToken = (req, res, next)=>{
 
 }
 
-/*
-const checkUser = (email) => {
-    
-   
-    pool.query('SELECT * FROM users WHERE email = $1', [email.email], (err, res) => {
-        
-        if (err) {
-            throw err;
-        }
-
-        console.log(res.rows[0]);
-       return res.rows[0];
-  
-})
-
-
-let saveUser = (email, username, hash) => {
-       
-    pool.query('INSERT INTO users (email, username, password) VALUES($1, $2, $3)', 
-        [email, username, hash], (err, res) => {
-            if (err) {
-                return err.status(500).json({
-                    error: err
-                });
-            }
-            return res.status(201).send({
-                success: `true`,
-                message: `New user saved successfully`
-            });
-                });
-};
-*/
-
 export default {pool, verifyToken, secret};

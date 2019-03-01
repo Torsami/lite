@@ -56,11 +56,10 @@ const logIn = (req, res, next) => {
                     res.cookie("answers", result.rows[0].answers)
                     
                            // res.redirect('localhost:5000/userpage.html')
-                    
                     return res.status(200).json({
                             success: `true`,
                             message: `Auth successful`,
-                            token
+                            token: token
                         });
                         
                     }else{
