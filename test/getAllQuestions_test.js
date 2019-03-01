@@ -1,6 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../src/app';
+import request from 'request';
 
 const should = chai.should();
 const expect = chai.expect();
